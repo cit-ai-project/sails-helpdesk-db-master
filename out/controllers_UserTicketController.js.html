@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/UserTicketController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/UserTicketController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * UserTicketController
+ *
+ * @description :: Server-side logic for managing usertickets
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
+ */
+
+module.exports = {
+    // URL prefix to proceed
+    _config: { prefix: '/api/helpdesk' },
+    //Create new Ticket
+    create: function (req, res) {
+
+        UserTicket.create(req.params.all(), function userTicketCreated(err, userTicket) {
+            if (err)
+                return res.json({ 'success': false, 'message': err });
+            res.json({ 'success': true, 'TicketNo': userTicket.id });
+
+        });
+    },
+
+    //update ticket status
+    modifyStatus: function (req, res) {
+
+        UserTicket.update({ id: req.query.Id }, { status: req.query.Status }).exec(function updateTicketStatus(err, updated) {
+
+            if (err) {
+                return res.json({ 'success': false, 'message': err });
+            }
+            res.json({ 'success': true, 'message': 'Status Updated Successfully' });
+        });
+    },
+
+    //update ModifiedBy User
+    modifyModifiedBy: function (req, res) {
+
+        UserTicket.update({ id: req.query.Id }, { modified_by: req.query.UserId }).exec(function updateModifiedBy(err, updated) {
+
+            if (err) {
+                return res.json({ 'success': false, 'message': err });
+            }
+            res.json({ 'success': true, 'message': 'User Updated Successfully' });
+        });
+    },
+
+    //update AssignedTo User
+    modifyAssignedTo: function (req, res) {
+
+        UserTicket.update({ id: req.query.Id }, { assigned_to: req.query.UserId }).exec(function updateAssignedTo(err, updated) {
+
+            if (err) {
+                return res.json({ 'success': false, 'message': err });
+            }
+            res.json({ 'success': true, 'message': 'User Updated Successfully' });
+        });
+    },
+
+    //update AssignedBy User
+    modifyAssignedBy: function (req, res) {
+
+        UserTicket.update({ id: req.query.Id }, { assigned_by: req.query.UserId }).exec(function updateAssignedBy(err, updated) {
+
+            if (err) {
+                return res.json({ 'success': false, 'message': err });
+            }
+            res.json({ 'success': true, 'message': 'User Updated Successfully' });
+        });
+    },
+
+    //getAll UserTickets created by a User
+    getAllUserTickets: function (req, res) {
+
+        var queryAllUserTicket = UserTicket.find();
+        queryAllUserTicket.where({ 'created_by': req.query.UserId });
+        queryAllUserTicket.exec(function callBack(err, results) {
+            if (err) {
+                return res.json({ 'success': false, 'message': err });
+            }
+            if (Object.keys(results).length == 0) {
+                return res.json({ 'success': false, 'message': 'No Data fetched from DB' });
+            }
+            // console.log("Results == >"+results);
+            res.json({ 'success': true, 'message': 'Retrived all User specific tickets Successfully', results });
+
+
+        });
+    },
+
+
+    //getAllTicketsByStatus  'new' status UserTickets  order by priority severity
+    getAllTicketsByStatus: function (req, res) {
+
+        var queryAllUserTicket = UserTicket.find();
+        queryAllUserTicket.where({ 'status': req.query.ticket_status });
+        queryAllUserTicket.sort('priority ASC');
+        queryAllUserTicket.sort('severity ASC');
+        queryAllUserTicket.exec(function callBack(err, results) {
+            if (err) {
+                return res.json({ 'success': false, 'message': err });
+            }
+            if (Object.keys(results).length == 0) {
+                return res.json({ 'success': false, 'message': 'No Data fetched from DB' });
+            }
+            res.json({ 'success': true, 'message': 'Retrived all new tickets Successfully', results });
+        });
+    },
+
+    //getAllTicketsByPriority  get all tickets by priority
+    getAllTicketsByPriorityStatus: function (req, res) {
+
+        var queryAllUserTicket = UserTicket.find();
+
+        if (req.query.ticket_status != undefined)
+            queryAllUserTicket.where({ 'priority': req.query.ticket_priority, 'status': req.query.ticket_status });
+        else
+            queryAllUserTicket.where({ 'priority': req.query.ticket_priority });
+
+        queryAllUserTicket.sort('status ASC');
+        queryAllUserTicket.exec(function callBack(err, results) {
+            if (err) {
+                return res.json({ 'success': false, 'message': err });
+            }
+            if (Object.keys(results).length == 0) {
+                return res.json({ 'success': false, 'message': 'No Data fetched from DB' });
+            }
+            res.json({ 'success': true, 'message': 'Retrived all tickets by Priority Successfully', results });
+        });
+    },
+
+    //getAllTicketsByPriority  get all tickets by priority
+    getAllTicketsBySeverityStatus: function (req, res) {
+
+        var queryAllUserTicket = UserTicket.find();
+
+        if (req.query.ticket_status != undefined)
+            queryAllUserTicket.where({ 'severity': req.query.ticket_severity, 'status': req.query.ticket_status });
+        else
+            queryAllUserTicket.where({ 'severity': req.query.ticket_severity });
+
+        queryAllUserTicket.sort('status ASC');
+        queryAllUserTicket.exec(function callBack(err, results) {
+            if (err) {
+                return res.json({ 'success': false, 'message': err });
+            }
+            if (Object.keys(results).length == 0) {
+                return res.json({ 'success': false, 'message': 'No Data fetched from DB' });
+            }
+            res.json({ 'success': true, 'message': 'Retrived all tickets by Severity Successfully', results });
+        });
+    },
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-__%2520Policy.html">:: Policy</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_">_</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Wed Dec 27 2017 12:44:24 GMT+0530 (Sri Lanka Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
