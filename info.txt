@@ -1,0 +1,72 @@
+
+UserRole.create({role_:1, role_name:'Admin',role_short_desc:'Admin activities',role_long_desc:'Admin activities'}).exec(console.log)
+UserRole.create({role_:2, role_name:'User',role_short_desc:'Chat User',role_long_desc:'Chat User'}).exec(console.log)
+
+
+User.create({user_id:'S8888',user_name:'Shan',user_email:'shan@gmail.com',user_role:1,first_name:'Shunmugam',last_name:'Ramanathan'}).exec(console.log)
+User.create({user_id:'C2508',user_name:'Clement', user_email:'clement@gmail.com',user_role:2,first_name:'Clement',last_name:'Rajesh'}).exec(console.log)
+User.create({user_id:'M2502',user_name:'Mani', user_email:'mani@gmail.com',user_role:1,first_name:'Mani',last_name:'kandan'}).exec(console.log)
+User.create({user_id:'R2527',user_name:'Ram', user_email:'ram@gmail.com',user_role:2,first_name:'Rama',last_name:'Nathan'}).exec(console.log)
+User.create({user_id:'V2528',user_name:'Vijay', user_email:'vijo@gmail.com',user_role:1,first_name:'VIjay',last_name:'Vijo'}).exec(console.log)
+
+
+Asset.create({asset_id: 'shan-lp', asset_name: 'shan-lp', asset_type: 'laptop', assigned_to : 'S8888', asset_desc:'assigned to shan'}).exec(console.log)
+Asset.create({asset_id: 'clem-dk',asset_name: 'clem-dk', asset_type: 'desktop', assigned_to : 'C2508', asset_desc:'assigned to Clement'}).exec(console.log)
+Asset.create({asset_id: 'mani-lp',asset_name: 'mani-lp', asset_type: 'laptop', assigned_to : 'M2502', asset_desc:'assigned to Mani'}).exec(console.log)
+Asset.create({asset_id: 'ram-lp',asset_name: 'ram-lp', asset_type: 'desktop', assigned_to : 'R2527', asset_desc:'assigned to Ram'}).exec(console.log)
+Asset.create({asset_id: 'vijo-dk',asset_name: 'vijo-dk', asset_type: 'desktop', assigned_to : 'V2528', asset_desc:'assigned to Vijay'}).exec(console.log)
+
+Priority.create({priority_id :1,priority_name: 'Critical', priority_desc:'Critical'}).exec(console.log)
+Priority.create({priority_id:2,priority_name: 'High', priority_desc:'High'}).exec(console.log)
+Priority.create({priority_id:3,priority_name: 'Medium', priority_desc:'Medium'}).exec(console.log)
+Priority.create({priority_id:4,priority_name: 'Low', priority_desc:'Low'}).exec(console.log)
+
+
+Severity.create({severity_id:1,severity_name: 'Critical', severity_desc:'Critical'}).exec(console.log)
+Severity.create({severity_id:2,severity_name: 'High', severity_desc:'High'}).exec(console.log)
+Severity.create({severity_id:3,severity_name: 'Medium', severity_desc:'Medium'}).exec(console.log)
+Severity.create({severity_id:4,severity_name: 'Low', severity_desc:'Low'}).exec(console.log)
+
+Status.create({status_id:1,status_name: 'new', status_desc:'new'}).exec(console.log)
+Status.create({status_id:2,status_name: 'assigned', status_desc:'assigned to sys admin'}).exec(console.log)
+Status.create({status_id:3,status_name: 'in-progress', status_desc:'in-progress'}).exec(console.log)
+Status.create({status_id:4,status_name: 'pending', status_desc:'pending from user/other operational reasons'}).exec(console.log)
+Status.create({status_id:5,status_name: 'resolved', status_desc:'resolved by sys admin'}).exec(console.log)
+Status.create({status_id:6,status_name: 'closed', status_desc:'closed by user or administrator'}).exec(console.log)
+Status.create({status_id:7,status_name: 'invalid', status_desc:'invalid ticket'}).exec(console.log)
+Status.create({status_id:8,status_name: 're-open', status_desc:'re-opened by user or administrator'}).exec(console.log)
+
+
+UserTicket.create({ticket_title:'Getting Blue Screen', ticket_desc:'Getting Blue Screen', status:1, asset:'mani-lp' ,priority:1,severity:1, created_by:'S8888',modified_by:'S8888', assigned_to :'C2508', assigned_by :'S8888'}).exec(console.log)
+UserTicket.create({ticket_title:'Getting Blue Screen', ticket_desc:'Getting Blue Screen', status:1, asset:'ram-lp'  ,priority:1,severity:1, created_by:'C2508',modified_by:'S8888', assigned_to :'M2502', assigned_by :'S8888'}).exec(console.log)
+UserTicket.create({ticket_title:'Getting Blue Screen', ticket_desc:'Getting Blue Screen', status:1, asset:'vijo-dk' ,priority:1,severity:1, created_by:'M2502',modified_by:'M2502', assigned_to :'R2527', assigned_by :'M2502'}).exec(console.log)
+UserTicket.create({ticket_title:'Getting Blue Screen', ticket_desc:'Getting Blue Screen', status:1, asset:'clem-dk' ,priority:1,severity:1, created_by:'R2527',modified_by:'R2527', assigned_to :'V2528', assigned_by :'R2527'}).exec(console.log)
+UserTicket.create({ticket_title:'Getting Blue Screen', ticket_desc:'Getting Blue Screen', status:1, asset:'shan-lp' ,priority:1,severity:1, created_by:'V2528',modified_by:'V2528', assigned_to :'C2508', assigned_by :'V2528'}).exec(console.log)
+
+
+
+Create Ticket			:		http://192.168.61.153:1337/api/helpdesk/userTicket/create?ticket_title='Monitor not working'&ticket_desc='Monitor is not switching on'&priority=1&severity=1&status=1&asset='ram-lp'&created_by='S8888'
+
+Modify Ticket Status 	:		http://192.168.61.153:1337/api/helpdesk/userTicket/modifyStatus?ticketId=1&statusId=3
+Modify ModifiedBY User	:		http://192.168.61.153:1337/api/helpdesk/userTicket/modifyModifiedBy?ticketId=1&userId=C2508
+Modify Assigned TO	  	:		http://192.168.61.153:1337/api/helpdesk/userTicket/modifyAssignedTo?ticketId=1&userId=R2527
+Modify Assigned By		:		http://192.168.61.153:1337/api/helpdesk/userTicket/modifyAssignedBy?ticketId=1&userId=S8888
+
+Get all user ticket 	: 		http://192.168.61.153:1337/api/helpdesk/userTicket/getAllUserTickets?userId=3
+Get all ticket by Status:		http://192.168.61.153:1337/api/helpdesk/userTicket/getAllTicketsByStatus?ticketStatus=1
+Get all priority &status:		http://192.168.61.153:1337/api/helpdesk/userTicket/getAllTicketsByPriorityStatus?ticketPriority=1&ticketStatus=3
+Get all severity &status:		http://192.168.61.153:1337/api/helpdesk/userTicket/getAllTicketsBySeverityStatus?ticketSeverity=1&ticketStatus=3
+
+Get Tickets				: 		http://192.168.61.153:1337/api/helpdesk/userTicket/getTickets?userId=S8888&ticketSeverity=1&ticketStatus=3
+
+
+
+
+
+Validate Asset 		:		http://192.168.61.153:1337/api/helpdesk/asset/validateAsset?assetId=ram-lp&userId=R2527
+Get Asset By User	: 		http://192.168.61.153:1337/api/helpdesk/asset/getAssetByUser?userId=R2527
+
+Validate Admin		:		http://192.168.61.153:1337/api/helpdesk/user/validateIsAdmin?userName=Clement
+							http://192.168.60.222:1337/api/helpdesk/user/validateIsAdmin?userId=S8888
+
+
