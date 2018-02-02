@@ -1,0 +1,14 @@
+<script type="text/javascript">
+    $(function () {
+      var url = '/swagger/doc';
+
+      // Pre load translate...
+      if(window.SwaggerTranslator) {
+        window.SwaggerTranslator.translate();
+      }
+      window.swaggerUi = new SwaggerUi({
+        url: url
+      });
+    }
+        
+</script>
